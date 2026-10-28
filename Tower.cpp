@@ -45,3 +45,11 @@ void Tower::update(double dt) {
 bool Tower::isRecharged() const {
     return rechargeTime <= 0;
 }
+
+void Tower::takeDamage(double amount) {
+    Validator::validatePositive("damageAmount", amount);
+    life -= amount;
+    if (life < 0) {
+        life = 0;
+    }
+}

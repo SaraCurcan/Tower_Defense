@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 #include "Vector2D.h"
+#include "Utils.h"
+
 class Tower {
 private:
     int rechargeTime;
@@ -12,6 +14,7 @@ protected:
     int level;
     Vector2D position;
     std::string name;
+
 public:
     Tower();
     Tower(int rechargeTime, int cost,double life, double damage, int level, Vector2D position, std::string name);
@@ -35,4 +38,6 @@ public:
 
     void update(double dt);
     bool isRecharged() const;
+
+    void takeDamage(double amount);
 };

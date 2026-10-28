@@ -16,10 +16,11 @@ public:
     Tower();
     Tower(int rechargeTime, int cost,double life, double damage, int level, Vector2D position, std::string name);
     virtual ~Tower();
-    int getRechargeTime() const;
+    Tower(const Tower& obj) = default;
+    Tower& operator=(const Tower& obj) = default;
 
+    int getRechargeTime() const;
     int getCost() const;
-    // void setCost(int newCost);
     int getLevel() const;
 
     Vector2D getPosition() const;

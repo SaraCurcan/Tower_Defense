@@ -8,6 +8,9 @@ Tower(rechargeTime,cost,life,damage,level,position,name) {
     Validator::validatePositive("burnDuration", burnDuration);
     this->burnDuration = burnDuration;
 }
+
+
+
 ArcherTower::~ArcherTower(){}
 
 double ArcherTower::getBurnDuration() const { return burnDuration; }

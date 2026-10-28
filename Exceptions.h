@@ -9,6 +9,6 @@ public:
 class NegativeValue: public ValueException {
     double badValue;
 public:
-    NegativeValue(const string& field,double badValue): ValueException("Incorrect value: " + to_string(badValue) + " for " + field + "'s value should be positive"), badValue(badValue) {}
+    NegativeValue(const string& field,double badValue): ValueException("Incorrect value: " + to_string(badValue) + " for " + field + +" ; "+field + "'s value should be positive"), badValue(badValue) {}
     double getBadValue() const {return badValue;}
 };

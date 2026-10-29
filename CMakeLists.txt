@@ -17,4 +17,8 @@ add_executable(Tower main.cpp
         CannonTower.cpp
         Enemy.h
         Enemy.cpp
+        Zombie.h
+        Zombie.cpp
+        Skeleton.h
+        Skeleton.cpp
 )

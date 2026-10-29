@@ -1,5 +1,7 @@
+#pragma once
 #include<stdexcept>
 #include<string>
+
 using namespace std;
 class ValueException : public runtime_error {
 public:

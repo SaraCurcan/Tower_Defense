@@ -5,11 +5,11 @@ private:
     double burnDuration;
 public:
     ArcherTower();
-    ArcherTower(int rechargeTime, int cost, double life, double damage, int level, Vector2D position, std::string name,  double bDuration);
+    ArcherTower(double rechargeTime, int cost, double life, double damage, int level, Vector2D position, std::string name,  double bDuration);
     ArcherTower(const ArcherTower& obj) = default;
     ArcherTower& operator=(const ArcherTower& obj) = default;
 
-    // void attack() override;
+    void attack(Enemy& enemy) override;
     void upgrade() override;
     double getBurnDuration() const;
     void setBurnDuration(double burnDuration);

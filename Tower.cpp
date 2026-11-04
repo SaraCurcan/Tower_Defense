@@ -1,16 +1,18 @@
 #include <iostream>
 #include <string>
+#include<algorithm>
 #include "Tower.h"
 #include "Utils.h"
-Tower::Tower():rechargeTime(0),cost(0),life(0.0), damage(0.0), level(1), position(0.0, 0.0), name("DefaultTower") {}
-Tower::Tower(int rechargeTime, int cost, double life, double damage, int level, Vector2D position, std::string name) {
-    Validator::validatePositive("rechargeTime",rechargeTime);
+Tower::Tower():rechargeTime(0.0),remainingRecharge(0.0),cost(0),life(0.0), damage(0.0), level(1), position(0.0, 0.0), name("DefaultTower") {}
+Tower::Tower(double rechargeTime, int cost, double life, double damage, int level, Vector2D position, std::string name) {
+    Validator::validateStrictPositive("rechargeTime",rechargeTime);
     Validator::validatePositive("cost",cost);
-    Validator::validatePositive("life",life);
+    Validator::validateStrictPositive("life", life);
     Validator::validatePositive("damage",damage);
     Validator::validateStrictPositive("level",level);
 
     this->rechargeTime = rechargeTime;
+    this->remainingRecharge=0.0;
     this->cost = cost;
     this->life = life;
     this->damage = damage;
@@ -21,7 +23,7 @@ Tower::Tower(int rechargeTime, int cost, double life, double damage, int level, 
 
 Tower::~Tower() {}
 
-int Tower::getRechargeTime() const { return rechargeTime; }
+double Tower::getRechargeTime() const { return rechargeTime; }
 int Tower::getCost() const { return cost; }
 int Tower::getLevel() const { return level; }
 
@@ -34,22 +36,38 @@ std::string Tower::getName() const { return name; }
 bool Tower::isDead() const {
     return life<=0;
 }
+
 void Tower::update(double dt) {
-    if (rechargeTime > 0) {
-        rechargeTime -= dt;
-        if (rechargeTime < 0)
-            rechargeTime = 0;
+    Validator::validatePositive("dt", dt);
+
+    if (remainingRecharge > 0.0) {
+        remainingRecharge -= dt;
+
+        if (remainingRecharge < 0.0) {
+            remainingRecharge = 0.0;
+        }
     }
 }
 
 bool Tower::isRecharged() const {
-    return rechargeTime <= 0;
+    return remainingRecharge <= 0.0;
 }
 
-void Tower::takeDamage(double amount) {
+double Tower::takeDamage(double amount) {
     Validator::validatePositive("damageAmount", amount);
-    life -= amount;
-    if (life < 0) {
-        life = 0;
-    }
+    double actualDamage = std::min(life, amount);
+    life -= actualDamage;
+    return actualDamage;
+}
+
+void Tower::resetCooldown() {
+    remainingRecharge = rechargeTime;
+}
+
+double Tower::getRemainingRecharge() const {
+    return remainingRecharge;
+}
+
+bool Tower::canAttack(const Enemy& enemy) const {
+    return !isDead() && isRecharged() && enemy.isAlive();
 }

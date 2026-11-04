@@ -4,7 +4,7 @@
 
 CannonTower::CannonTower() : Tower(), damageArea(0.0) {}
 
-CannonTower::CannonTower(int rechargeTime, int cost, double life, double damage, int level, Vector2D position, std::string name, double damageArea)
+CannonTower::CannonTower(double rechargeTime, int cost, double life, double damage, int level, Vector2D position, std::string name, double damageArea)
     : Tower(rechargeTime, cost, life, damage, level, position, name) {
     Validator::validatePositive("damageArea", damageArea);
     this->damageArea = damageArea;
@@ -25,4 +25,9 @@ void CannonTower::upgrade() {
     damageArea += 2;
     std::cout << "Cannon Tower updated to level " << level << std::endl;
     std::cout << "Damage area: " << damageArea << " damage: " << damage << std::endl;
+}
+
+void CannonTower::attack(Enemy& enemy) {
+    enemy.takeDamage(enemy.getHealth());
+    std::cout << "CannonTower fired a heavy shell and eliminated the enemy in one hit!" << std::endl;
 }

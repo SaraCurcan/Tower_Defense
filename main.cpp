@@ -1,25 +1,44 @@
 #include <iostream>
-#include "Vector2D.h"
-#include "ArcherTower.h"
+#include "GunTower.h"
 #include "Zombie.h"
-#include "Skeleton.h"
+
+using namespace std;
 
 int main() {
-    ArcherTower myTower(2, 100, 100.0, 15.0, 1, Vector2D(100.0, 100.0), "Archer", 1.5);
+    try {
+        GunTower tower(3.0, 100, 200.0, 30.0, 1, Vector2D(0, 0), "GunTower");
+        Zombie zombie(100.0, 1.5, 10, 20.0, Vector2D(2, 2), 2.0, 150.0);
 
-    Zombie zombie(80.0, 2.0, 5, 25.0, Vector2D(0.0, 0.0), 1.0, 80.0);
-    Skeleton skeleton(50.0, 2.5, 3, 10.0, Vector2D(10.0, 10.0), 0.8);
+        double dt = 1.0;
 
-    std::cout << "Initial Zombie position: (" << zombie.getPosition().x << ", " << zombie.getPosition().y << ")" << std::endl;
-    zombie.move(myTower.getPosition());
-    std::cout << "Zombie position after move: (" << zombie.getPosition().x << ", " << zombie.getPosition().y << ")" << std::endl;
+        cout << "=== INITIAL STATE ===" << endl;
+        cout << "Tower life: " << tower.getLife() << endl;
+        cout << "Zombie health: " << zombie.getHealth() << endl;
 
-    std::cout << "Zombie health before lifesteal attack: " << zombie.getHealth() << std::endl;
-    zombie.attack(myTower);
-    std::cout << "Zombie health after lifesteal attack: " << zombie.getHealth() << std::endl;
+        for (int i = 1; i <= 10; i++) {
+            cout << "\n=== SECOND " << i << " ===" << endl;
 
-    std::cout << "Is zombie alive? " << (zombie.isAlive() ? "YES" : "NO") << std::endl;
-    std::cout << "Is skeleton alive? " << (skeleton.isAlive() ? "YES" : "NO") << std::endl;
+            tower.update(dt);
+            zombie.update(dt);
+
+            tower.attack(zombie);
+            zombie.attack(tower);
+
+            cout << "Tower life: " << tower.getLife() << endl;
+            cout << "Zombie health: " << zombie.getHealth() << endl;
+
+            cout << "Tower cooldown: " << tower.getRemainingRecharge() << endl;
+            cout << "Zombie cooldown ready: " << zombie.isAttackReady() << endl;
+
+            if (tower.isDead() || !zombie.isAlive()) {
+                cout << "\nGAME OVER!" << endl;
+                break;
+            }
+        }
+    }
+    catch (const ValueException& e) {
+        cerr << "Error: " << e.what() << endl;
+    }
 
     return 0;
 }

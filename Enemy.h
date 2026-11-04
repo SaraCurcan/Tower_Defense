@@ -2,7 +2,7 @@
 #include "Vector2D.h"
 #include "Exceptions.h"
 #include "Utils.h"
-
+#include "Tower.h"
 class Tower;
 
 class Enemy {
@@ -13,6 +13,10 @@ protected:
     double damage;
     Vector2D position;
     double attackTime;
+    double remainingAttackTime;
+
+    bool canAttack(const Tower& targetTower) const;
+    void resetAttackCooldown();
 public:
     Enemy();
     Enemy(double health, double speed, int reward, double damage, Vector2D position, double attackTime);
@@ -36,4 +40,7 @@ public:
 
     virtual void move(const Vector2D& targetPosition) = 0;
     virtual void attack(Tower& targetTower);
+
+    void update(double dt);
+    bool isAttackReady() const;
 };

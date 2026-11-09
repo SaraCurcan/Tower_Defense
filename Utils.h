@@ -1,14 +1,14 @@
 #pragma once
-#include "Exceptions.h"
 #include <string>
-using namespace std;
+#include "Exceptions.h"
+
 class Validator {
 public:
-    static void validatePositive(const string& field, double value) {
+    static void validatePositive(const std::string& field, double value) {
         if (value<0)
             throw NegativeValue(field,value);
     }
-    static void validateStrictPositive(const string& field,double value) {
+    static void validateStrictPositive(const std::string& field,double value) {
         if (value<=0)
             throw NegativeValue(field,value);
     }

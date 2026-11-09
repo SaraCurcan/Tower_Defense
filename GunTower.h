@@ -1,15 +1,16 @@
 #pragma once
-#include <iostream>
 #include "Tower.h"
 
 class GunTower : public Tower {
+protected:
+    void fire(Enemy& target, std::vector<std::unique_ptr<Enemy>>& enemies) override;
+    void applyUpgrade() override;
 public:
     GunTower();
-    GunTower(double rechargeTime,int cost, double life, double damage, int level, Vector2D position, std::string name);
+    GunTower(double rechargeTime, int cost, double maxLife, double damage, double range,
+             Vector2D position, const std::string& name);
     GunTower(const GunTower& obj)=default;
     GunTower& operator=(const GunTower& obj)=default;
-
-    void attack(Enemy& enemy) override;
-    void upgrade() override;
     ~GunTower() override;
+    explicit GunTower(Vector2D position);
 };

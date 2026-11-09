@@ -1,31 +1,42 @@
 #pragma once
-#include <iostream>
 #include <string>
-#include<algorithm>
+#include <vector>
+#include <memory>
+#include <ostream>
 #include "Vector2D.h"
-#include "Enemy.h"
+
 class Enemy;
 
 class Tower {
 private:
     double rechargeTime;
     double remainingRecharge;
+
+    Enemy* findTarget(std::vector<std::unique_ptr<Enemy>>& enemies) const;
 protected:
     int cost;
     double life;
+    double maxLife;
     double damage;
+    double range;
     int level;
     Vector2D position;
     std::string name;
 
     bool isRecharged() const;
     void resetCooldown();
-    bool canAttack(const Enemy& enemy) const;
+    void setRechargeTime(double newRechargeTime);
+    bool isInRange(const Enemy& enemy) const;
+
+    virtual void fire(Enemy& target, std::vector<std::unique_ptr<Enemy>>& enemies) = 0;
+    virtual void applyUpgrade() = 0;
 
 public:
-    Tower();
-    Tower(double rechargeTime, int cost,double life, double damage, int level, Vector2D position, std::string name);
-    virtual ~Tower();
+    static constexpr int MAX_LEVEL = 5;
+    Tower() = delete;
+    Tower(double rechargeTime, int cost, double maxLife, double damage, double range,
+          Vector2D position, const std::string& name);
+    virtual ~Tower()=default;
     Tower(const Tower& obj) = default;
     Tower& operator=(const Tower& obj) = default;
 
@@ -33,19 +44,24 @@ public:
     double getRemainingRecharge() const;
 
     int getCost() const;
+    int getUpgradeCost() const;
     int getLevel() const;
 
     Vector2D getPosition() const;
     void setPosition( Vector2D newPosition);
 
     double getLife() const;
-    std::string getName() const;
-
-    virtual void upgrade() = 0;
-    virtual void attack(Enemy& enemy) = 0;
+    const std::string& getName() const;
     bool isDead() const;
 
-    void update(double dt);
-
     double takeDamage(double amount);
+    double getMaxLife() const;
+    double getRange() const;
+
+    void update(double dt, std::vector<std::unique_ptr<Enemy>>& enemies);
+    void upgrade();
+
+    virtual void print(std::ostream& os) const;
+    friend std::ostream& operator<<(std::ostream& os, const Tower& tower);
+
 };

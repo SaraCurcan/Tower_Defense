@@ -3,15 +3,22 @@
 class ArcherTower : public Tower {
 private:
     double burnDuration;
+    double burnDps;
+protected:
+    void fire(Enemy& target, std::vector<std::unique_ptr<Enemy>>& enemies) override;
+    void applyUpgrade() override;
 public:
     ArcherTower();
-    ArcherTower(double rechargeTime, int cost, double life, double damage, int level, Vector2D position, std::string name,  double bDuration);
+    ArcherTower(double rechargeTime, int cost, double maxLife, double damage, double range,
+                Vector2D position, const std::string& name, double burnDps, double burnDuration);
     ArcherTower(const ArcherTower& obj) = default;
     ArcherTower& operator=(const ArcherTower& obj) = default;
 
-    void attack(Enemy& enemy) override;
-    void upgrade() override;
     double getBurnDuration() const;
     void setBurnDuration(double burnDuration);
     ~ArcherTower() override;
+
+    double getBurnDps() const;
+    explicit ArcherTower(Vector2D position);
+    void print(std::ostream& os) const override;
 };

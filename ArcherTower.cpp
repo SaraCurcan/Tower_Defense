@@ -1,14 +1,20 @@
 #include "ArcherTower.h"
 #include "Utils.h"
+#include "Enemy.h"
 #include <iostream>
 
-ArcherTower::ArcherTower():Tower(), burnDuration(0.0){}
-ArcherTower::ArcherTower(double rechargeTime, int cost, double life, double damage, int level, Vector2D position, std::string name, double burnDuration):
-Tower(rechargeTime,cost,life,damage,level,position,name) {
+ArcherTower::ArcherTower()
+    : Tower(1.5, 150, 150.0, 10.0, 4.0, Vector2D{0, 0}, "ArcherTower"),
+      burnDps(5.0), burnDuration(3.0) {}
+
+ArcherTower::ArcherTower(double rechargeTime, int cost, double maxLife, double damage, double range,
+                         Vector2D position, const std::string& name, double burnDps, double burnDuration)
+    : Tower(rechargeTime, cost, maxLife, damage, range, position, name) {
+    Validator::validatePositive("burnDps", burnDps);
     Validator::validatePositive("burnDuration", burnDuration);
+    this->burnDps = burnDps;
     this->burnDuration = burnDuration;
 }
-
 
 
 ArcherTower::~ArcherTower(){}
@@ -19,17 +25,24 @@ void ArcherTower::setBurnDuration(double burnDurations) {
     this->burnDuration = burnDurations;
 }
 
-void ArcherTower::upgrade() {
-    level++;
-    damage+=8;
-    burnDuration+=0.3;
-    std::cout<<"Archer Tower updated to level "<<level<<std::endl;
-    std::cout<<"Burn duration : "<<burnDuration<< ". Archer damage: " <<damage <<std::endl;
+double ArcherTower::getBurnDps() const { return burnDps; }
+
+ArcherTower::ArcherTower(Vector2D position)
+    : Tower(1.5, 150, 150.0, 10.0, 4.0, position, "ArcherTower"),
+      burnDps(5.0), burnDuration(3.0) {}
+
+void ArcherTower::fire(Enemy& target, std::vector<std::unique_ptr<Enemy>>&) {
+    target.takeDamage(damage);
+    target.applyBurn(burnDps, burnDuration);
 }
 
-void ArcherTower::attack(Enemy& enemy) {
-    enemy.takeDamage(this->damage);
-    double burnDamage = this->damage * 0.5 * this->burnDuration;
-    enemy.takeDamage(burnDamage);
-    std::cout << "ArcherTower applied burn effect for " << burnDuration << " seconds, dealing an extra " << burnDamage << " damage!" << std::endl;
+void ArcherTower::applyUpgrade() {
+    damage += 3.0;
+    burnDps += 2.0;
+    burnDuration += 0.5;
+}
+
+void ArcherTower::print(std::ostream& os) const {
+    Tower::print(os);
+    os << " | burn " << burnDps << " dps x " << burnDuration << "s";
 }

@@ -1,25 +1,23 @@
 #include "GunTower.h"
-#include "Utils.h"
 #include <iostream>
+#include "Enemy.h"
 
-GunTower::GunTower() : Tower(){}
-GunTower::GunTower(double rechargeTime, int cost, double life, double damage, int level, Vector2D position, std::string name)
-    : Tower(rechargeTime, cost, life, damage, level, position, name) {
-}
+GunTower::GunTower()
+    : Tower(1.0, 100, 200.0, 20.0, 3.0, Vector2D{0, 0}, "GunTower") {}
 
-void GunTower::upgrade() {
-    level++;
-    damage+=5.0;
-    std::cout<<"GunTower was upgraded to level "<<level<<std::endl;
-    std::cout<<"Shooter damage: "<<damage<<std::endl;
-}
+GunTower::GunTower(double rechargeTime, int cost, double maxLife, double damage, double range,
+                   Vector2D position, const std::string& name)
+    : Tower(rechargeTime, cost, maxLife, damage, range, position, name) {}
 
-void GunTower::attack(Enemy& enemy) {
-    if (!canAttack(enemy)) {
-        return;
-    }
-    enemy.takeDamage(this->damage);
-    resetCooldown();
-}
+GunTower::GunTower(Vector2D position)
+    : Tower(1.0, 100, 200.0, 20.0, 3.0, position, "GunTower") {}
 
 GunTower::~GunTower(){}
+
+void GunTower::fire(Enemy& target, std::vector<std::unique_ptr<Enemy>>&) {
+    target.takeDamage(damage);
+}
+
+void GunTower::applyUpgrade() {
+    damage += 5.0;
+}

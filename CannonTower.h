@@ -4,16 +4,20 @@
 class CannonTower : public Tower {
 private:
     double damageArea;
+protected:
+    void fire(Enemy& target, std::vector<std::unique_ptr<Enemy>>& enemies) override;
+    void applyUpgrade() override;
 public:
     CannonTower();
-    CannonTower(double rechargeTime, int cost, double life, double damage, int level, Vector2D position, std::string name, double damageArea);
+    CannonTower(double rechargeTime, int cost, double maxLife, double damage, double range,
+                Vector2D position, const std::string& name, double damageArea);
+    explicit CannonTower(Vector2D position);
     CannonTower(const CannonTower& obj) = default;
     CannonTower& operator=(const CannonTower& obj) = default;
-    
-    void attack(Enemy& enemy) override;
-    void upgrade() override;
+
     double getDamageArea() const;
     void setDamageArea(double damageArea);
     ~CannonTower() override;
+    void print(std::ostream& os) const override;
 
 };

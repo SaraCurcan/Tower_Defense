@@ -2,15 +2,25 @@
 #include<stdexcept>
 #include<string>
 
-using namespace std;
-class ValueException : public runtime_error {
+class GameException : public std::runtime_error {
 public:
-    explicit ValueException(const string& msg): runtime_error(msg) {}
+    explicit GameException(const std::string& msg) : std::runtime_error(msg) {}
+};
+
+class ValueException : public GameException {
+public:
+    explicit ValueException(const std::string& msg): GameException(msg) {}
 };
 
 class NegativeValue: public ValueException {
     double badValue;
 public:
-    NegativeValue(const string& field,double badValue): ValueException("Incorrect value: " + to_string(badValue) + " for " + field +" ; "+field + "'s value should be positive"), badValue(badValue) {}
+    NegativeValue(const std::string& field,double badValue): ValueException("Incorrect value: " + std::to_string(badValue) + " for " + field + ": must be >=0"), badValue(badValue) {}
     double getBadValue() const {return badValue;}
+};
+
+class MaxLevelReached : public GameException {
+public:
+    MaxLevelReached(const std::string& towerName, int maxLevel)
+        : GameException(towerName + " is already at max level (" + std::to_string(maxLevel) + ")") {}
 };

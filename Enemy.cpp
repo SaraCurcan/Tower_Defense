@@ -1,11 +1,13 @@
+#include "Utils.h"
 #include "Enemy.h"
 #include "Tower.h"
+#include <algorithm>
 
 Enemy::Enemy()
-    : health(100.0), speed(1.0), reward(10), damage(10.0), position(Vector2D(0, 0)), attackTime(1.0),remainingAttackTime(0.0) {}
+    : health(100.0), speed(1.0), reward(10), damage(10.0), position(Vector2D(0, 0)), attackTime(1.0),remainingAttackTime(0.0),burnTimeLeft(0.0), burnDps(0.0) {}
 
 Enemy::Enemy(double health, double speed, int reward, double damage, Vector2D position, double attackTime)
-    : position(position),remainingAttackTime(0.0) {
+    : position(position),remainingAttackTime(0.0),burnTimeLeft(0.0), burnDps(0.0) {
 
     Validator::validatePositive("health", health);
     Validator::validatePositive("speed", speed);
@@ -87,4 +89,21 @@ void Enemy::update(double dt) {
     if (remainingAttackTime < 0.0) {
         remainingAttackTime = 0.0;
     }
+    if (burnTimeLeft > 0.0) {
+        double burnTime = std::min(dt, burnTimeLeft);
+        takeDamage(burnDps * burnTime);
+        burnTimeLeft -= burnTime;
+    }
+}
+void Enemy::applyBurn(double dps, double duration) {
+    Validator::validatePositive("burnDps", dps);
+    Validator::validatePositive("burnDuration", duration);
+    burnDps = dps;
+    burnTimeLeft = duration;
+}
+bool Enemy::isBurning() const {
+    return burnTimeLeft > 0.0;
+}
+void Enemy::takeHeavyHit() {
+    takeDamage(health);
 }

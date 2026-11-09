@@ -24,3 +24,8 @@ public:
     MaxLevelReached(const std::string& towerName, int maxLevel)
         : GameException(towerName + " is already at max level (" + std::to_string(maxLevel) + ")") {}
 };
+
+class InvalidPath : public GameException {
+public:
+    explicit InvalidPath(const std::string& msg) : GameException("Invalid path: " + msg) {}
+};

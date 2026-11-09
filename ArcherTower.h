@@ -2,8 +2,8 @@
 #include "Tower.h"
 class ArcherTower : public Tower {
 private:
-    double burnDuration;
     double burnDps;
+    double burnDuration;
 protected:
     void fire(Enemy& target, std::vector<std::unique_ptr<Enemy>>& enemies) override;
     void applyUpgrade() override;

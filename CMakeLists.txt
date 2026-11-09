@@ -21,4 +21,6 @@ add_executable(Tower main.cpp
         Zombie.cpp
         Skeleton.h
         Skeleton.cpp
+        Path.h
+        Path.cpp
 )

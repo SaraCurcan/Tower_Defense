@@ -4,7 +4,7 @@
 #include <iostream>
 
 ArcherTower::ArcherTower()
-    : Tower(1.5, 150, 150.0, 10.0, 4.0, Vector2D{0, 0}, "ArcherTower"),
+    : Tower(1.5, 150, 150.0, 15.0, 4.0, Vector2D{0, 0}, "ArcherTower"),
       burnDps(5.0), burnDuration(3.0) {}
 
 ArcherTower::ArcherTower(double rechargeTime, int cost, double maxLife, double damage, double range,
@@ -28,7 +28,7 @@ void ArcherTower::setBurnDuration(double burnDurations) {
 double ArcherTower::getBurnDps() const { return burnDps; }
 
 ArcherTower::ArcherTower(Vector2D position)
-    : Tower(1.5, 150, 150.0, 10.0, 4.0, position, "ArcherTower"),
+    : Tower(1.5, 150, 150.0, 15.0, 4.0, position, "ArcherTower"),
       burnDps(5.0), burnDuration(3.0) {}
 
 void ArcherTower::fire(Enemy& target, std::vector<std::unique_ptr<Enemy>>&) {

@@ -3,16 +3,17 @@
 
 class Zombie : public Enemy {
 private:
-    double maxHealth;
-    void checkLife();
+    static constexpr double heal_percent = 0.20;
 public:
     Zombie();
-    Zombie(double health, double speed, int reward, double damage, Vector2D position, double attackTime, double maxHealth);
+    Zombie(double maxHealth, double speed, int reward, double damage, Vector2D position,
+          double attackTime, double attackRange);
+    explicit Zombie(Vector2D position);
 
     Zombie(const Zombie& obj) = default;
     Zombie& operator=(const Zombie& obj) = default;
     ~Zombie() override;
 
-    void move(const Vector2D& targetPosition) override;
     void attack(Tower& targetTower) override;
+    std::string getType() const override;
 };

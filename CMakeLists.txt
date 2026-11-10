@@ -23,4 +23,5 @@ add_executable(Tower main.cpp
         Skeleton.cpp
         Path.h
         Path.cpp
+        Golem.h
 )

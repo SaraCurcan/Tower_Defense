@@ -4,11 +4,12 @@
 class Skeleton : public Enemy {
 public:
     Skeleton();
-    Skeleton(double health, double speed, int reward, double damage, Vector2D position, double attackTime);
+    Skeleton(double maxHealth, double speed, int reward, double damage, Vector2D position, double attackTime,double attackRange);
 
     Skeleton(const Skeleton& obj) = default;
     Skeleton& operator=(const Skeleton& obj) = default;
     ~Skeleton() override;
 
-    void move(const Vector2D& targetPosition) override;
+    explicit Skeleton(Vector2D position);
+    std::string getType() const override;
 };
